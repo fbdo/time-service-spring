@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WorldTimeClient implements TimeClient {
 
-    @Value("worldtime.url")
+    @Value("${worldtime.url}")
     private String wordTimeURL;
 
     @Override
