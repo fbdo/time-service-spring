@@ -28,6 +28,16 @@ ext {
 	springCloudVersion = 'Finchley.SR2'
 }
 
+bootRun {
+    jvmArgs = [
+            '-XX:+UseG1GC', '-Xms128M', '-Xmx1024M',
+            '-XX:+UnlockCommercialFeatures', '-XX:+FlightRecorder',
+            '-XX:FlightRecorderOptions=defaultrecording=true,dumponexit=true,dumponexitpath=build/'
+    ]
+}
+
+task run(dependsOn: bootRun)
+
 dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-actuator')
 	implementation('org.springframework.boot:spring-boot-starter-web')
