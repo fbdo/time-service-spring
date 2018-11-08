@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -24,8 +25,13 @@ public class WorldTimeClient implements TimeClient {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        WorldTime wt = restTemplate.getForObject(wordTimeURL, WorldTime.class);
+        try {
+            WorldTime wt = restTemplate.getForObject(wordTimeURL, WorldTime.class);
 
-        return DateTime.parse(wt.getDatetime());
+            return DateTime.parse(wt.getDatetime());
+        } catch (RestClientException rce) {
+            LOGGER.warn("Remote acess error:", rce);
+            throw rce;
+        }
     }
 }
