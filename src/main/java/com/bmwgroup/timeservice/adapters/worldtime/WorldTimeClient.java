@@ -19,11 +19,11 @@ public class WorldTimeClient implements TimeClient {
     @Value("${worldtime.url}")
     private String wordTimeURL;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     @Override
     public DateTime now() {
         LOGGER.debug("Retrieving time from WorldTime service");
-
-        RestTemplate restTemplate = new RestTemplate();
 
         try {
             WorldTime wt = restTemplate.getForObject(wordTimeURL, WorldTime.class);

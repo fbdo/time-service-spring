@@ -17,6 +17,8 @@ public class ReliableTimeClient implements TimeClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReliableTimeClient.class);
 
+    private DateTime now;
+
     @Autowired
     @Qualifier("worldtime")
     private TimeClient decorated;
@@ -24,12 +26,17 @@ public class ReliableTimeClient implements TimeClient {
     @Override
     @HystrixCommand(fallbackMethod = "reliableNow")
     public DateTime now() {
-        return decorated.now();
+        now = decorated.now();
+        return now;
     }
 
     public DateTime reliableNow() {
-        LOGGER.warn("Access to time service failed, using reliable intra-VM source instead");
+        LOGGER.debug("Access to time service failed, using reliable intra-VM source instead");
 
-        return DateTime.now();
+        if (now == null) {
+            now = DateTime.now();
+        }
+
+        return now;
     }
 }
